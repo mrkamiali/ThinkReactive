@@ -7,6 +7,13 @@ import java.util.ArrayList;
  */
 
 public class DataGenerator {
+    public static ArrayList<Integer> integerList(int lenght){
+        ArrayList<Integer> myList = new ArrayList<>();
+        for (int i =0;i<lenght;i++){
+            myList.add(i);
+        }
+        return myList;
+    }
     public static ArrayList<User> userList(){
         ArrayList<User> userList = new ArrayList<>();
 

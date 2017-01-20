@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/CompositionPractice.iml" filepath="$PROJECT_DIR$/CompositionPractice.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ThinkReactive.iml" filepath="$PROJECT_DIR$/ThinkReactive.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
