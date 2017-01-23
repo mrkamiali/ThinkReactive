@@ -1,19 +1,27 @@
 package com.example.kamranali.compositionpractice;
 
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+
 import java.util.ArrayList;
-import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import io.reactivex.internal.operators.observable.ObservableAmb;
+import io.reactivex.observables.ConnectableObservable;
 import io.reactivex.schedulers.Schedulers;
 
 
 public class MainActivity extends AppCompatActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +32,135 @@ public class MainActivity extends AppCompatActivity {
 //        scanExample();
 //        groupbyExample();
 //        conditionalOperatorsExample();
-        
+//        connectableObserverExample();
+        ObserverExample();
+    }
+
+    private void ObserverExample() {
+        ArrayList<User> users = DataGenerator.userList();
+
+        Observable<User> userObservable = Observable.fromIterable(DataGenerator.userList());
+//        userObservable
+//                .map(new Function<User, User>() {
+//                    @Override
+//                    public User apply(User user) throws Exception {
+//                        user.setName(user.getName()+" Altered");
+//                        return user;
+//                    }
+//                })
+//                .subscribe(user -> AppLog.loge(user.toString()));
+
+
+        userObservable.subscribe(new Observer<User>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                AppLog.loge("OnSubscribe " + d.toString());
+            }
+
+            @Override
+            public void onNext(User user) {
+                AppLog.loge("onNext  " + user.toString());
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onComplete() {
+
+                AppLog.loge("OnComplete Called.");
+            }
+        });
+
+        try {
+            Thread.sleep(5000);
+
+            AppLog.loge("------------------------------");
+            users.add(new User(0, "=======", "------"));
+            users.add(new User(1, "=======", "------"));
+            users.add(new User(2, "=======", "------"));
+            users.add(new User(3, "=======", "------"));
+            users.add(new User(4, "=======", "------"));
+            AppLog.loge("------------------------------");
+            AppLog.loge(users.toString());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void connectableObserverExample() {
+        ArrayList<User> users = DataGenerator.userList();
+
+
+        ConnectableObservable<User> observable = ConnectableObservable.fromIterable(users).publish();
+
+        //here I have passed value by passed by value thats why its isnt changes in next Observer
+        observable.autoConnect()
+                .map(user -> new User(user.getLevel(), user.getName() + "\n --- Altered --- ", user.getEmail()))
+                .subscribe(s -> AppLog.loge("\n1" + s.toString()));
+//
+//        observable.autoConnect()
+//                .toSortedList((o1, o2) -> o1.getName().compareTo(o2.getName()))
+//                .subscribe(us -> AppLog.loge("\n2" + us.toString()));
+//
+//        observable.autoConnect()
+//                .subscribeOn(Schedulers.computation())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .filter(user -> {
+//                    Thread.sleep(3000);
+//                    return user.getLevel() != 0;
+//                })
+//                .subscribe(user -> AppLog.loge("\n3" + user.toString()));
+
+
+        observable.subscribe(new Observer<User>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                AppLog.loge("Changes Detected onSubscribe() \n" + d.toString());
+            }
+
+            @Override
+            public void onNext(User user) {
+                AppLog.loge("Changes Detected OnNext() \n" + user.toString());
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+
+        try {
+            Thread.sleep(5000);
+
+            AppLog.loge("-----------------------------------------------------");
+
+            users.add(new User(1, "-----", "-----"));
+            users.add(new User(2, "-----", "-----"));
+            users.add(new User(3, "-----", "-----"));
+            users.add(new User(4, "-----", "-----"));
+            users.add(new User(5, "-----", "-----"));
+            users.add(new User(0, "-----", "-----"));
+
+
+            AppLog.loge("-----------------------------------------------------");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            AppLog.loge("------------------Finally------------------");
+        }
+
+
     }
 
 
@@ -154,4 +290,31 @@ public class MainActivity extends AppCompatActivity {
 //                    }
 //                });
     }
+
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    public Action getIndexApiAction() {
+        Thing object = new Thing.Builder()
+                .setName("Main Page") // TODO: Define a title for the content shown.
+                // TODO: Make sure this auto-generated URL is correct.
+                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
+                .build();
+        return new Action.Builder(Action.TYPE_VIEW)
+                .setObject(object)
+                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
+                .build();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+   }
 }
