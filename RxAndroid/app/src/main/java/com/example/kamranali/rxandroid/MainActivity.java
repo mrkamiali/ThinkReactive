@@ -1,13 +1,16 @@
 package com.example.kamranali.rxandroid;
 
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -25,20 +28,29 @@ public class MainActivity extends AppCompatActivity {
     private Button mSearchButton;
     private EditText mQueryEditText;
     private Observable<String> stringObservable;
+    private ListView listView;
+    private MyAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        
         mSearchButton = (Button) findViewById(R.id.myButton);
         mQueryEditText = (EditText) findViewById(R.id.myEditText);
+        listView = (ListView) findViewById(R.id.myListView);
         Model model = new Model();
+        adapter = new MyAdapter(this, model);
+        listView.setAdapter(adapter);
+
         Observable.create(model)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(AndroidSchedulers.mainThread())
                 .map(new Function<User, User>() {
                     @Override
                     public User apply(User user) throws Exception {
-
-                        return new User(user.getName()+""+System.currentTimeMillis(),user.getEmail());
+                        return new User(user.getName() + " " + System.currentTimeMillis(), user.getEmail());
                     }
                 }).subscribe(new Observer<User>() {
             @Override
@@ -48,7 +60,10 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onNext(User user) {
-Log.d("Kamran",user.toString());
+
+                adapter.notifyDataSetChanged();
+                Log.d("Kamran ", user.toString());
+
             }
 
             @Override
@@ -62,8 +77,8 @@ Log.d("Kamran",user.toString());
             }
         });
         Observable.fromIterable(DataGenerator.getArrayList())
-                .observeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
                 .subscribe(new Observer<User>() {
                     @Override
                     public void onSubscribe(Disposable d) {
@@ -72,10 +87,10 @@ Log.d("Kamran",user.toString());
 
                     @Override
                     public void onNext(User user) {
-
                         try {
                             Thread.sleep(1000);
                             model.add(user);
+//                            model.add(user);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }

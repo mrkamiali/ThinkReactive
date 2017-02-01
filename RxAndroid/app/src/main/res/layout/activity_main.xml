@@ -15,9 +15,15 @@
         android:layout_height="wrap_content"
         android:id="@+id/myButton"/>
     <EditText
-
+android:layout_above="@+id/myListView"
         android:layout_below="@id/myButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/myEditText"/>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/myButton"
+        android:id="@+id/myListView" />
 </RelativeLayout>

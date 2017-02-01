@@ -1,9 +1,12 @@
 package com.example.kamranali.compositionpractice;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.Button;
 
+import com.example.kamranali.compositionpractice.annotations.AnnotationActivity;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
@@ -23,17 +26,24 @@ import io.reactivex.schedulers.Schedulers;
 public class MainActivity extends AppCompatActivity {
 
 
+    private Button myButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        myButton = (Button) findViewById(R.id.btn1);
+        myButton.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, AnnotationActivity.class)));
 //        userFiltration();
 //        flatmapExample();
 //        scanExample();
 //        groupbyExample();
 //        conditionalOperatorsExample();
 //        connectableObserverExample();
-        ObserverExample();
+//        ObserverExample();
+
+
     }
 
     private void ObserverExample() {

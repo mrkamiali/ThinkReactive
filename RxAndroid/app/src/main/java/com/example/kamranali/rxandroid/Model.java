@@ -2,7 +2,7 @@ package com.example.kamranali.rxandroid;
 
 import java.util.ArrayList;
 
-import io.reactivex.Emitter;
+
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -12,7 +12,7 @@ import io.reactivex.ObservableOnSubscribe;
  */
 
 public class Model extends ArrayList<User> implements ObservableOnSubscribe<User>{
-    private ObservableEmitter<User> emitter ;
+    ObservableEmitter<User> emitter;
     @Override
     public boolean add(User user) {
         emitter.onNext(user);
@@ -20,8 +20,14 @@ public class Model extends ArrayList<User> implements ObservableOnSubscribe<User
     }
 
     @Override
-    public void subscribe(ObservableEmitter<User> emitter) throws Exception {
-            this.emitter = emitter;
+    public void add(int index, User user) {
+        emitter.onNext(user);
+        super.add(index, user);
 
+    }
+
+    @Override
+    public void subscribe(ObservableEmitter<User> emitter) throws Exception {
+        this.emitter = emitter;
     }
 }
