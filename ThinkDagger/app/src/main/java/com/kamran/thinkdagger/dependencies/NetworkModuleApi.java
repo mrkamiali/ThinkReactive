@@ -1,7 +1,6 @@
 package com.kamran.thinkdagger.dependencies;
 
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import com.kamran.thinkdagger.utils.Constants;
 
 import dagger.Module;
 import dagger.Provides;
@@ -11,7 +10,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 /**
  * Created by Kamran ALi on 2/5/2017.
  */
-
 @Module
 public class NetworkModuleApi {
 
@@ -22,24 +20,22 @@ public class NetworkModuleApi {
     }
 
     @Provides
+    GsonConverterFactory providesGsonConverterFactory (){
+        return GsonConverterFactory.create();
+    }
+
+    @Provides
     RxJava2CallAdapterFactory providesRxJava2CallAdapterFactory(){
         return RxJava2CallAdapterFactory.create();
     }
 
     @Provides
-    GsonConverterFactory providesGsonConverterFactory(){
-        return GsonConverterFactory.create();
-    }
-
-    @Provides
     Retrofit providesRetrofitService(GsonConverterFactory gsonConverterFactory,
-                                     RxJava2CallAdapterFactory rxJava2CallAdapterFactory){
-
+                                     RxJava2CallAdapterFactory rxJava2CallAdapterFactory) {
         return new Retrofit.Builder()
-                .baseUrl(Constants.BASE_URL)
+                .baseUrl(baseUrl)
                 .addConverterFactory(gsonConverterFactory)
                 .addCallAdapterFactory(rxJava2CallAdapterFactory)
                 .build();
     }
 }
-
