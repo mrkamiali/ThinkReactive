@@ -1,4 +1,4 @@
-package com.kamran.dagger.dagger2withmultipleapi.dependencies;
+package com.kamran.dagger.dagger2retrofit2practice.dependencies;
 
 import android.content.Context;
 
@@ -6,12 +6,10 @@ import dagger.Module;
 import dagger.Provides;
 
 /**
- * Created by Kamran ALi on 2/6/2017.
+ * Created by Kamran ALi on 2/15/2017.
  */
-
 @Module
 public class ContextModule {
-
     private Context context;
 
     public ContextModule(Context context) {
@@ -19,9 +17,7 @@ public class ContextModule {
     }
 
     @Provides
-    @ApiCustomScope
     Context context() {
         return context;
     }
 }
-

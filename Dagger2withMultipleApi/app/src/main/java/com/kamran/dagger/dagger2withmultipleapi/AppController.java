@@ -29,11 +29,10 @@ public class AppController extends Application {
 
     @Override
     public void onCreate() {
+        resolveDependencies();
         super.onCreate();
 
         Timber.plant(new Timber.DebugTree());
-        resolveDependencies();
-
 
 
     }

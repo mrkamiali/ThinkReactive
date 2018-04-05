@@ -20,12 +20,12 @@ public class NetworkModuleApi {
     }
 
     @Provides
-    GsonConverterFactory providesGsonConverterFactory (){
+    GsonConverterFactory providesGsonConverterFactory() {
         return GsonConverterFactory.create();
     }
 
     @Provides
-    RxJava2CallAdapterFactory providesRxJava2CallAdapterFactory(){
+    RxJava2CallAdapterFactory providesRxJava2CallAdapterFactory() {
         return RxJava2CallAdapterFactory.create();
     }
 

@@ -9,6 +9,8 @@ import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.kamran.dagger.dagger2withmultipleapi.service.GetUserService;
 import com.kamran.dagger.dagger2withmultipleapi.utils.Constants;
 
+import javax.inject.Qualifier;
+
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
@@ -28,15 +30,13 @@ public class ApiComponentModule {
         return retrofit.create(GetUserService.class);
     }
 
-//    //bad ma Gson ko hata k deakna hy is it working or not
-//    @Provides
-//    @ApiCustomScope
-//    Gson gson(){
-//        GsonBuilder gsonBuilder = new GsonBuilder();
-//        //DateTime.class, new DateTimeConverter()
-//        gsonBuilder.registerTypeAdapter(gsonBuilder.getClass(),new DateTypeAdapter());
-//        return gsonBuilder.create();
-//    }
+
+    @Provides
+    @ApiCustomScope
+    @R2
+    GetUserService getUserService2(@R2 Retrofit retrofit) {
+        return retrofit.create(GetUserService.class);
+    }
 
     @Provides
     @ApiCustomScope
@@ -47,6 +47,19 @@ public class ApiComponentModule {
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(okHttpClient)
                 .build();
+    }
+
+    @Provides
+    @ApiCustomScope
+    @R2
+    Retrofit retrofit2(OkHttpClient okHttpClient) {
+        return new Retrofit.Builder()
+                .baseUrl(Constants.BASE_UR)
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(okHttpClient)
+                .build();
+
     }
 
 }
